@@ -6,42 +6,8 @@ on:
       - main
 
 jobs:
-  setup:
+  deploy-frontend:
     runs-on: ubuntu-latest
-    outputs:
-      frontend_changed: ${{ steps.diff.outputs.frontend_changed }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Fetch full history so git diff works
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install pnpm globally
-        run: |
-          npm install -g pnpm
-          pnpm -v
-
-      - name: Install dependencies
-        run: pnpm install
-
-      # Check if frontend or shared packages changed
-      - name: Check frontend + shared packages changes
-        id: diff
-        run: |
-          # Only include existing package folders
-          PACKAGES=$(find packages -maxdepth 1 -type d 2>/dev/null)
-          FRONTEND_CHANGES=$(git diff --name-only $GITHUB_SHA^ $GITHUB_SHA apps/web $PACKAGES)
-          echo "frontend_changed=$([ -n "$FRONTEND_CHANGES" ] && echo true || echo false)" >> $GITHUB_OUTPUT
-          echo "Changed files: $FRONTEND_CHANGES"
-
-  build-and-deploy-frontend:
-    needs: setup
-    runs-on: ubuntu-latest
-    if: needs.setup.outputs.frontend_changed == 'true'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -58,14 +24,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build frontend (Turbo ensures dependencies + caching)
+      - name: Build frontend
         run: pnpm turbo run build --filter web
 
-      - name: Deploy to Vercel (prod)
+      - name: Deploy frontend to Vercel
         run: npx vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
 
-  build-and-deploy-backend:
-    needs: setup
+  deploy-backend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -83,10 +48,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build backend (Turbo ensures dependencies + caching)
+      - name: Build backend
         run: pnpm turbo run build --filter server
 
-      - name: Deploy to Azure Web App
+      - name: Deploy backend to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: collabdraw-backend
