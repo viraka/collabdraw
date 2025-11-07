@@ -1,0 +1,92 @@
+name: CollabDraw CI/CD
+
+on:
+  push:
+    branches:
+      - main   # Only deploy when main is pushed
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+  check-frontend-changes:
+    needs: setup
+    runs-on: ubuntu-latest
+    outputs:
+      frontend_changed: ${{ steps.diff.outputs.frontend_changed }}
+    steps:
+      - name: Fetch main branch
+        run: git fetch origin main
+
+      - name: Check frontend + shared packages changes
+        id: diff
+        run: |
+          FRONTEND_CHANGES=$(git diff --name-only origin/main $GITHUB_SHA apps/web packages/types packages/utils packages/ui)
+          echo "frontend_changed=$([ -n "$FRONTEND_CHANGES" ] && echo true || echo false)" >> $GITHUB_OUTPUT
+
+  build-and-deploy-frontend:
+    needs: [setup, check-frontend-changes]
+    runs-on: ubuntu-latest
+    if: needs.check-frontend-changes.outputs.frontend_changed == 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build frontend (Turbo ensures dependencies first)
+        run: pnpm --filter web build
+
+      - name: Deploy to Vercel (prod)
+        run: npx vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+
+  build-and-deploy-backend:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build backend (Turbo ensures dependencies first)
+        run: pnpm --filter server build
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: collabdraw-backend
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+          package: apps/server
