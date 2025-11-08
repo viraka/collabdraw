@@ -33,27 +33,17 @@ jobs:
   deploy-backend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure SSH key
+        uses: webfactory/ssh-agent@v0.4.1
         with:
-          fetch-depth: 0
+          ssh-private-key: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install pnpm globally
-        run: npm install -g pnpm
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build backend
-        run: pnpm turbo run build --filter server
-
-      - name: Deploy backend to Azure Web App
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: collabdraw-backend
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          package: apps/server
+      - name: Deploy
+        env:
+          REMOTE_IP: ${{ secrets.DEV_REMOTE_IP }}
+          PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@$REMOTE_IP "cd $PROJECT_PATH && git pull && docker compose up --build --force-recreate -d"
