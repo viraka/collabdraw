@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "@collabdraw/types": ["packages/types/src"],
-      "@collabdraw/utils": ["packages/utils/src"],
-      "@collabdraw/ui": ["packages/ui/src"]
+      "@collabdraw/types": ["./packages/types/src"],
+      "@collabdraw/utils": ["./packages/utils/src"],
+      "@collabdraw/ui": ["./packages/ui/src"]
     }
   }
 }
