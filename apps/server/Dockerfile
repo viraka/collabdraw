@@ -20,7 +20,7 @@ COPY packages ./packages
 RUN pnpm install --frozen-lockfile --workspace-root
 
 # Copy backend source code
-COPY apps/backend ./apps/backend
+COPY apps/server ./apps/server
 
 # Build TypeScript project
 RUN pnpm build
