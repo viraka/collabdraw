@@ -39,11 +39,11 @@ jobs:
       - name: Configure SSH key
         uses: webfactory/ssh-agent@v0.4.1
         with:
-          ssh-private-key: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Deploy
         env:
-          REMOTE_IP: ${{ secrets.DEV_REMOTE_IP }}
+          REMOTE_IP: ${{ secrets.REMOTE_IP }}
           PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@$REMOTE_IP "cd $PROJECT_PATH && git pull && docker compose up --build --force-recreate -d"
