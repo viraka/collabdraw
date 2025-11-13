@@ -28,4 +28,5 @@ RUN pnpm build
 EXPOSE 3000
 
 # Start backend
-CMD ["node", "apps/server/dist/src/index.js"]
+WORKDIR /app/apps/server
+CMD ["node", "dist/src/index.js"]
