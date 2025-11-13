@@ -16,6 +16,9 @@ COPY package*.json ./
 # Copy packages folder (monorepo)
 COPY packages ./packages
 
+# Copy turbo.json for Turborepo
+COPY turbo.json ./ 
+
 # Install dependencies
 RUN pnpm install --frozen-lockfile --workspace-root
 
