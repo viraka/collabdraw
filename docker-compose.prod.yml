@@ -1,8 +1,8 @@
 services:
   backend:
     build:
-      context: apps/server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: apps/server/Dockerfile
     ports:
       - "3000:3000"
     environment:
