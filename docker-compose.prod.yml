@@ -5,5 +5,5 @@ services:
       dockerfile: apps/server/Dockerfile
     ports:
       - "3000:3000"
-    environment:
-      NODE_ENV: production
+    volumes:
+      - ./apps/server:/app/apps/server
