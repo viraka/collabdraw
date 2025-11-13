@@ -4,7 +4,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Install pnpm globally
-RUN npm install -g pnpm
+RUN npm install -g pnpm typescript tsc-alias
 
 # Copy lockfile & workspace config for caching
 COPY pnpm-lock.yaml ./
@@ -20,7 +20,7 @@ COPY packages ./packages
 COPY turbo.json ./ 
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile --workspace-root --dev
+RUN pnpm install --frozen-lockfile --workspace-root 
 
 # Copy backend source code
 COPY apps/server ./apps/server
