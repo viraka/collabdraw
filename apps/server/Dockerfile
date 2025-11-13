@@ -18,7 +18,7 @@ COPY apps/server ./apps/server
 COPY package*.json ./
 
 # Install dependencies (including devDeps)
-RUN pnpm install --frozen-lockfile --workspace-root --dev
+RUN pnpm install 
 
 # Build backend
 RUN pnpm build
