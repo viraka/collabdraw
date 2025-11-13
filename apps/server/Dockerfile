@@ -1,20 +1,26 @@
-# Use lightweight Node image
+# Lightweight Node image
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Install global tools (pnpm for package management)
+# Install pnpm globally
 RUN npm install -g pnpm
 
-# Copy package.json files first for caching dependencies
+# Copy lockfile & workspace config for caching
+COPY pnpm-lock.yaml ./
+COPY pnpm-workspace.yaml ./
+
+# Copy package.json files
 COPY package*.json ./
-COPY ../../packages ./packages
+
+# Copy packages folder (monorepo)
+COPY packages ./packages
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --workspace-root
 
 # Copy backend source code
-COPY . .
+COPY apps/backend ./apps/backend
 
 # Build TypeScript project
 RUN pnpm build
@@ -22,5 +28,5 @@ RUN pnpm build
 # Expose backend port
 EXPOSE 3000
 
-# Run compiled backend (dist/src/index.js)
+# Start backend
 CMD ["node", "dist/src/index.js"]
