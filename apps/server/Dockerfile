@@ -20,7 +20,7 @@ COPY packages ./packages
 COPY turbo.json ./ 
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile --workspace-root 
+RUN pnpm install --frozen-lockfile --workspace-root --dev
 
 # Copy backend source code
 COPY apps/server ./apps/server
