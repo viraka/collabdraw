@@ -5,6 +5,7 @@ WORKDIR /app
 
 # Install pnpm globally
 RUN npm install -g pnpm typescript tsc-alias
+ENV NODE_ENV=development
 
 # Copy lockfile & workspace config for caching
 COPY pnpm-lock.yaml ./
