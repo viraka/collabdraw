@@ -2,33 +2,27 @@
 FROM node:20-alpine
 
 WORKDIR /app
-ENV NODE_ENV=development
 
-# Install pnpm globally
+# Global tools
 RUN npm install -g pnpm typescript tsc-alias
 
-
-# Copy lockfile & workspace config for caching
+# Copy lockfiles & workspace config
 COPY pnpm-lock.yaml ./
 COPY pnpm-workspace.yaml ./
+COPY turbo.json ./   
 
-# Copy package.json files
+# Copy monorepo packages & apps
+COPY packages ./packages
+COPY apps/server ./apps/server
+# Copy root package.json files
 COPY package*.json ./
 
-# Copy packages folder (monorepo)
-COPY packages ./packages
+# Install dependencies (including devDeps)
+RUN pnpm install --frozen-lockfile --workspace-root --dev
 
-# Copy turbo.json for Turborepo
-COPY turbo.json ./ 
-
-# Install dependencies
-RUN pnpm install --frozen-lockfile --workspace-root
-
-# Copy backend source code
-COPY apps/server ./apps/server
-
-# Build TypeScript project
+# Build backend
 RUN pnpm build
+
 
 # Expose backend port
 EXPOSE 3000
