@@ -20,10 +20,13 @@ fastify.get("/", async () => {
   return "OK";
 });
 
-fastify.listen({ port: 3000 }, (err, address) => {
-  if (err) {
-    fastify.log.error(err);
-    process.exit(1);
+fastify.listen(
+  { port: 3000, host: process.env.HOST || "0.0.0.0" },
+  (err, address) => {
+    if (err) {
+      fastify.log.error(err);
+      process.exit(1);
+    }
+    console.log(`Server running on port ${address}`);
   }
-  console.log(`Server running on port ${address}`);
-});
+);
