@@ -14,6 +14,9 @@ importers:
 
   apps/server:
     dependencies:
+      '@collabdraw/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@fastify/cors':
         specifier: ^11.0.1
         version: 11.0.1
@@ -57,6 +60,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@collabdraw/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@tanstack/react-form':
         specifier: ^1.12.3
         version: 1.14.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -120,6 +126,16 @@ importers:
         version: 4.1.11
       typescript:
         specifier: ^5
+        version: 5.8.3
+
+  packages/types:
+    dependencies:
+      zod:
+        specifier: ^3.22.0
+        version: 3.25.76
+    devDependencies:
+      typescript:
+        specifier: ^5.0.0
         version: 5.8.3
 
 packages:

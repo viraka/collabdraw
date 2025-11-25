@@ -7,7 +7,7 @@
     "strict": true,
     "skipLibCheck": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"], 
           },
     "outDir": "./dist",
     "types": [
@@ -18,5 +18,5 @@
   },
   "tsc-alias": {
     "resolveFullPaths": true
-  }
+  },
 }
