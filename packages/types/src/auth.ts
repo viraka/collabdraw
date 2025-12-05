@@ -1,35 +1,11 @@
-import { z } from "zod";
-
-// Zod schemas (for validation)
-export const registerSchema = z.object({
-  email: z.string().email(),
-  username: z.string().min(3).max(20),
-  password: z.string().min(8),
-});
-
-export const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
-
-// TypeScript types (inferred from Zod)
-export type RegisterRequest = z.infer<typeof registerSchema>;
-export type LoginRequest = z.infer<typeof loginSchema>;
-
-// Response types
-export interface AuthUser {
-  userId: string;
-  email: string;
+export interface Actor {
+  id: string;
   username: string;
+  tag: string;
+  type: "guest" | "user";
 }
 
-export interface LoginResponse {
+export interface AuthResponse {
   token: string;
-  user: AuthUser;
-}
-
-export interface RegisterResponse {
-  userId: string;
-  email: string;
-  username: string;
+  actor: Actor;
 }
