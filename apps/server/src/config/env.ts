@@ -16,11 +16,21 @@ const envSchema = z.object({
   }),
 
   // Auth
-  JWT_SECRET: z.string().min(32, {
-    message: "JWT_SECRET must be at least 32 characters for security",
+  JWT_ACCESS_SECRET: z.string().min(32, {
+    message: "JWT_ACCESS_SECRET must be at least 32 characters",
   }),
-  JWT_EXPIRES_IN: z.string().default("7d"),
 
+  JWT_ACCESS_EXPIRES_IN: z.coerce.number().default(900),
+
+  JWT_REFRESH_SECRET: z.string().min(32, {
+    message: "JWT_REFRESH_SECRET must be at least 32 characters",
+  }),
+
+  JWT_REFRESH_EXPIRES_IN: z.coerce.number().default(604800),
+
+  COOKIE_SECRET: z.string().min(32, {
+    message: "COOKIE_SECRET must be at least 32 characters",
+  }),
   // CORS (optional - Fastify CORS configuration)
   CORS_ORIGIN: z.string().default("http://localhost:5173"),
 
