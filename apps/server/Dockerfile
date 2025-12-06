@@ -47,6 +47,9 @@ RUN pnpm install --prod --frozen-lockfile
 # Copy built files from builder
 COPY --from=builder /app/apps/server/dist ./apps/server/dist
 
+# ✅ Copy built shared types (THIS WAS MISSING)
+COPY --from=builder /app/packages/types/dist ./packages/types/dist
+
 EXPOSE 3000
 
 # ✅ FIXED runtime entry (no more /src)
