@@ -1,10 +1,13 @@
 {
   "name": "@collabdraw/types",
   "version": "0.0.1",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
-  "exports": {
-    ".": "./src/index.ts"
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+    "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
   },
   "scripts": {
     "build": "tsc",
@@ -15,5 +18,5 @@
   },
   "dependencies": {
     "zod": "^3.22.0"
-  }
+  } 
 }
