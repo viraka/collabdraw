@@ -1,4 +1,4 @@
-import { ErrorCode } from "@collabdraw/types";
+import { ErrorCode } from "@/utils/app-error";
 import type { FastifyReply } from "fastify";
 
 export function success<T>(

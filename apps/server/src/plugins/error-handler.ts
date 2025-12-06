@@ -1,7 +1,6 @@
 import type { FastifyPluginAsync } from "fastify";
 import { ZodError } from "zod";
-import { AppError } from "@/utils/app-error";
-import { ErrorCode } from "@collabdraw/types";
+import { AppError, ErrorCode } from "@/utils/app-error";
 
 export const errorHandlerPlugin: FastifyPluginAsync = async (fastify) => {
   fastify.setErrorHandler((error, req, reply) => {

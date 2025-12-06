@@ -14,7 +14,9 @@ import { hashPassword, comparePassword } from "@/utils/password";
 import { success } from "@/utils/response";
 import { AppError } from "@/utils/app-error";
 
-import { ErrorCode, type Actor } from "@collabdraw/types";
+import { ErrorCode } from "@/utils/app-error";
+
+import { type Actor } from "@collabdraw/types";
 
 import { db } from "@/db";
 import { users } from "@/db/schema";
