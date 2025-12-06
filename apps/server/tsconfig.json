@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "rootDir": "src",
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -19,4 +20,6 @@
   "tsc-alias": {
     "resolveFullPaths": true
   },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "drizzle.config.ts"]
 }
