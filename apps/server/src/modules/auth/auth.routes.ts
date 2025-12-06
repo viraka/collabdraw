@@ -24,7 +24,7 @@ import { env } from "@/config/env";
 // ✅ GUEST LOGIN  (NO REFRESH TOKEN)
 // ============================================================
 export async function authRoutes(fastify: FastifyInstance) {
-  fastify.post("/auth/guest", async (req, reply) => {
+  fastify.post("/guest", async (req, reply) => {
     const { username } = guestSchema.parse(req.body);
 
     const actor: Actor = {
@@ -50,7 +50,7 @@ export async function authRoutes(fastify: FastifyInstance) {
   // ============================================================
   // ✅ USER REGISTER
   // ============================================================
-  fastify.post("/auth/register", async (req, reply) => {
+  fastify.post("/register", async (req, reply) => {
     const { username, password } = registerSchema.parse(req.body);
 
     const passwordHash = await hashPassword(password);
@@ -108,7 +108,7 @@ export async function authRoutes(fastify: FastifyInstance) {
   // ============================================================
   // ✅ USER LOGIN
   // ============================================================
-  fastify.post("/auth/login", async (req, reply) => {
+  fastify.post("/login", async (req, reply) => {
     const { username, password } = loginSchema.parse(req.body);
 
     const result = await db
@@ -168,7 +168,7 @@ export async function authRoutes(fastify: FastifyInstance) {
   // ============================================================
   // ✅ REFRESH TOKEN
   // ============================================================
-  fastify.post("/auth/refresh", async (req, reply) => {
+  fastify.post("/refresh", async (req, reply) => {
     const token = req.cookies?.refreshToken;
 
     if (!token) {
@@ -207,7 +207,7 @@ export async function authRoutes(fastify: FastifyInstance) {
   // ============================================================
   // ✅ LOGOUT
   // ============================================================
-  fastify.post("/auth/logout", async (req, reply) => {
+  fastify.post("/logout", async (req, reply) => {
     const actor = req.actor;
 
     if (!actor || actor.type !== "user") {
