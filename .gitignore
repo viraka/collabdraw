@@ -1,3 +1,4 @@
 node_modules
 .turbo
 JOURNEY.md
+dist
