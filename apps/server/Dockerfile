@@ -19,8 +19,12 @@ COPY apps/server ./apps/server
 # Install ALL dependencies
 RUN pnpm install --frozen-lockfile
 
-# Build
-RUN pnpm build
+# ✅ Build shared types first
+RUN pnpm --filter @collabdraw/types build
+
+# ✅ Build backend after
+RUN pnpm --filter server build
+
 
 # Production stage
 FROM node:20-alpine AS production
@@ -45,5 +49,5 @@ COPY --from=builder /app/apps/server/dist ./apps/server/dist
 
 EXPOSE 3000
 
-# Run from /app root so node_modules are accessible
-CMD ["node", "apps/server/dist/src/index.js"]
+# ✅ FIXED runtime entry (no more /src)
+CMD ["node", "apps/server/dist/index.js"]
